@@ -5,7 +5,6 @@ import {
 } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
-
 class Products extends Component {
   constructor(props) {
     super(props);
@@ -38,12 +37,13 @@ class Products extends Component {
 
   handleUpdate = (event) => {
     const { updateSellingPrice } = this.state;
-    const { history } = this.props;
+    // const { history } = this.props;
     event.preventDefault();
     fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/', { method: 'PATCH', body: JSON.stringify(updateSellingPrice) })
       .then((responce) => {
         if (responce.ok) {
-          return history.push('/');
+          // return history.push('/');
+          this.setState({ isEditing: false });
         }
         throw new Error(responce.error);
       })
@@ -129,8 +129,6 @@ Products.propTypes = {
     displayName: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
   }).isRequired,
-  // editProduct: PropTypes.func.isRequired,
-  history: PropTypes.objectOf({}).isRequired,
 };
 
 
