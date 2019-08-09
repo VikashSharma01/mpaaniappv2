@@ -37,12 +37,10 @@ class Products extends Component {
 
   handleUpdate = (event) => {
     const { updateSellingPrice } = this.state;
-    // const { history } = this.props;
     event.preventDefault();
     fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/', { method: 'PATCH', body: JSON.stringify(updateSellingPrice) })
       .then((responce) => {
         if (responce.ok) {
-          // return history.push('/');
           this.setState({ isEditing: false });
         }
         throw new Error(responce.error);
