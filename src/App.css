@@ -1,3 +1,13 @@
 .App {
   width: 100%;
 }
+
+.google-tag {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.google-search {
+  text-align: center;
+  margin-top: 1rem;
+}

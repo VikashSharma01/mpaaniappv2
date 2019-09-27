@@ -22,23 +22,22 @@ class Products extends Component {
   }
 
   handleChange = (event) => {
-    const { target } = event;
-    const { value } = target;
-    const { name } = target;
+    const { value, name } = event.target;
 
     this.setState(prevState => (
       {
         updateSellingPrice: {
           ...prevState.updateSellingPrice,
-          [name]: parseInt(value, 10),
+          [name]: parseFloat(value),
         },
       }));
   }
 
   handleUpdate = (event) => {
     const { updateSellingPrice } = this.state;
+    // const { data } = this.props;
     event.preventDefault();
-    fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/', { method: 'PATCH', body: JSON.stringify(updateSellingPrice) })
+    fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/?storeId=23416', { method: 'PATCH', headers: { Authorization: 'Token eb994eab6f96081200214592073027f816b1c9e5' }, body: JSON.stringify(updateSellingPrice) })
       .then((responce) => {
         if (responce.ok) {
           this.setState({ isEditing: false });
@@ -55,7 +54,7 @@ class Products extends Component {
       <div>
         <div className="mt-3 ml-3 mr-3 d-flex justify-content-start ">
           <div>
-            <img src={data.libraryProduct ? data.libraryProduct.image : 'https://res-2.cloudinary.com/crunchbase-production/image/upload/c_lpad,h_256,w_256,f_auto,q_auto:eco/v1415683087/qpjsb9obr1f3v36sevyn.jpg'} style={{ height: '100px', width: '100px' }} alt="100x100" />
+            <img src={data.libraryProduct ? data.libraryProduct.image : 'https://static-s.aa-cdn.net/img/gp/20600005380669/ZWh6_70jMhb34dx-RbEOR36iyaza_QBjy7wGfTTLHVoSeII5sRlYuPhcK3zm3cNRdQw=s300?v=1'} style={{ height: '100px', width: '100px' }} alt="100x100" />
             {!isEditing
               && (
               <div style={{ width: '100px' }} className="mt-3">
@@ -67,18 +66,21 @@ class Products extends Component {
           <div className="ml-3">
             <h6 style={{ fontSize: '0.9rem' }}><strong>{data.displayName}</strong></h6>
             <div style={{ display: 'flex' }}>
-              <h6 style={{ fontSize: '0.9rem', color: 'green' }}>
+              <h6 style={{
+                margin: '0', padding: '0', fontSize: '0.9rem', color: 'green',
+              }}
+              >
                 <strong>
-&#x20b9;
+                  &#x20b9;
                   {' '}
-                  {data.sellingPrice}
+                  {data.sellingPrice > 0 ? data.sellingPrice : null}
                 </strong>
 
               </h6>
               {(data.mrp <= data.sellingPrice) ? <h6>{null}</h6> : (
                 <h6 style={{ fontSize: '0.9rem', color: 'gray', marginLeft: '10px' }}>
                   <strong>
-&#x20b9;
+                    &#x20b9;
                     {' '}
                     {data.mrp}
                   </strong>
@@ -87,10 +89,10 @@ class Products extends Component {
               )}
             </div>
             <div>
-              <p><small><strong>In stock</strong></small></p>
+              <p className="p-0 m-0"><small><strong>In stock</strong></small></p>
             </div>
             <div>
-              <p><small>{data.modifiedOn}</small></p>
+              <p className="p-0 m-0"><small>{data.modifiedOn}</small></p>
             </div>
           </div>
         </div>

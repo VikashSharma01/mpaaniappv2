@@ -6,36 +6,25 @@ class AddProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newList: {
-        displayName: '',
-        barcode: '',
-        description: '',
-        mrp: '',
-        sellingPrice: '',
-        storeId: '23416',
-      },
+      displayName: '',
+      barcode: '',
+      description: '',
+      mrp: '',
+      sellingPrice: '',
+      storeId: '23416',
     };
   }
 
 handleChange = (event) => {
-  const { target } = event;
-  const { value } = target;
-  const { name } = target;
-
-  this.setState(prevState => (
-    {
-      newList: {
-        ...prevState.newList,
-        [name]: value,
-      },
-    }));
+  event.preventDefault();
+  const { value, name } = event.target;
+  this.setState({ [name]: value });
 }
 
 handleSubmit = (event) => {
-  const { newList } = this.state;
   const { history } = this.props;
   event.preventDefault();
-  fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/', { method: 'POST', body: JSON.stringify(newList) })
+  fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/', { method: 'POST', body: JSON.stringify(this.state) })
     .then((responce) => {
       if (responce.ok) {
         return history.push('/');
@@ -66,16 +55,16 @@ render() {
         </Form.Group>
         <Form.Group controlId="formBasicStoreID">
           <Form.Label>Store ID</Form.Label>
-          <Form.Control readOnly onChange={this.handleChange} name="StoreId" defaultValue={storeId} type="number" placeholder="23416" />
+          <Form.Control readOnly onChange={this.handleChange} name="StoreId" value={storeId} type="number" />
         </Form.Group>
         <Form.Row>
-          <Form.Group as={Col} controlId="formGridMrp">
-            <Form.Label>MRP</Form.Label>
-            <Form.Control onChange={this.handleChange} name="mrp" value={mrp} required type="number" placeholder="0" />
-          </Form.Group>
           <Form.Group as={Col} controlId="formGridSelling">
             <Form.Label>Selling Price</Form.Label>
             <Form.Control onChange={this.handleChange} name="sellingPrice" value={sellingPrice} required type="number" placeholder="0" />
+          </Form.Group>
+          <Form.Group as={Col} controlId="formGridMrp">
+            <Form.Label>MRP</Form.Label>
+            <Form.Control onChange={this.handleChange} name="mrp" value={mrp} required type="number" placeholder="0" />
           </Form.Group>
         </Form.Row>
         <Button variant="success" onClick={this.handleSubmit} type="submit">Submit</Button>

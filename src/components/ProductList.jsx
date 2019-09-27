@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button, InputGroup, FormControl } from 'react-bootstrap';
 import Products from './Products';
@@ -12,19 +13,16 @@ class ProductList extends Component {
   }
 
   componentDidMount() {
-    fetch('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/?limit=100&offset=0', { method: 'GET' })
-      .then(data => data.json())
-      .then(data => this.setState({ productList: data.results }))
-      .catch(err => (err));
+    axios.get('https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/?storeId=23416&limit=100&offset=0', { headers: { Authorization: 'Token eb994eab6f96081200214592073027f816b1c9e5' } })
+      .then(res => this.setState({ productList: res.data.results }));
   }
 
   handleInputChange = (e) => {
     e.preventDefault();
     const searchItem = e.target.value.toLowerCase();
-    fetch(`https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/?searchText=${searchItem}&limit=100&offset=0`)
-      .then(data => data.json())
-      .then(data => this.setState({
-        productList: data.results,
+    axios.get(`https://apionlinedelivery-staging.mpaani.com/homedelivery/v1/retailerproduct/?searchText=${searchItem}&limit=100&offset=0`, { headers: { Authorization: 'Token eb994eab6f96081200214592073027f816b1c9e5' } })
+      .then(res => this.setState({
+        productList: res.data.results,
       }));
   }
 
@@ -34,11 +32,11 @@ class ProductList extends Component {
       <div>
         <div
           style={{
-            zIndex: '1', position: 'fixed', top: '0px', width: '97%',
+            zIndex: '1', position: 'fixed', top: '0px', width: '100%',
           }}
-          className="ml-1"
+          className="px-1 pt-1 bg-white"
         >
-          <InputGroup className="mb-3">
+          <InputGroup>
             <InputGroup.Prepend>
               <InputGroup.Text style={{ backgroundColor: 'white' }} id="basic-addon1">search</InputGroup.Text>
             </InputGroup.Prepend>
@@ -58,7 +56,7 @@ class ProductList extends Component {
         >
           <Button variant="success" type="submit">&#x271A; Add Product</Button>
         </Link>
-        <div style={{ position: 'relative', top: '50px' }}>
+        <div style={{ paddingTop: '50px' }}>
           {productList.map(items => (
             <Products
               data={items}
