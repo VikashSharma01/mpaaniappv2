@@ -57,6 +57,14 @@ class ProductList extends Component {
           <Button variant="success" type="submit">&#x271A; Add Product</Button>
         </Link>
         <div style={{ paddingTop: '50px' }}>
+          <Link
+            to="/learn-react"
+            style={{
+              width: '100%', textAlign: 'center', color: 'black',
+            }}
+          >
+            <p style={{ color: 'blue' }}><em>www.google.com</em></p>
+          </Link>
           {productList.map(items => (
             <Products
               data={items}
